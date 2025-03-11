@@ -53,6 +53,7 @@ while True:
                 pass  # Skip this frame and use the last detected emotion
 
             # Display last detected emotion
+            # //dfji=-sdfihs
             emotion = last_emotion.get(name, "Detecting...")
             cv2.putText(frame, emotion, (x1, y2 + 20), cv2.FONT_HERSHEY_DUPLEX, 0.8, (0, 0, 255), 2)
 
