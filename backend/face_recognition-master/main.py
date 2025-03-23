@@ -2,6 +2,42 @@ import cv2
 import concurrent.futures
 from deepface import DeepFace
 from simple_facerec import SimpleFacerec
+from flask import Flask, Response, request, jsonify
+import cv2
+import base64
+import numpy as np
+
+app = Flask(__name__)
+camera = cv2.VideoCapture(0)
+
+def generate_frames():
+    while True:
+        success, frame = camera.read()
+        if not success:
+            break
+        else:
+            _, buffer = cv2.imencode('.jpg', frame)
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/capture', methods=['POST'])
+def capture():
+    data = request.json['image']
+    img_data = base64.b64decode(data.split(',')[1])
+    np_arr = np.frombuffer(img_data, np.uint8)
+    img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+    
+    # You can add face recognition processing here
+
+    return jsonify({"message": "Image received and processed"})
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
 
 # Load known faces
 sfr = SimpleFacerec()
