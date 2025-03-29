@@ -7,8 +7,6 @@ const Button = ({ children, onClick }) => (
     {children}
   </button>
 );
-
-
 const CameraPage = () => {
   const [capturedImage, setCapturedImage] = useState(null);
   const webcamRef = useRef(null);

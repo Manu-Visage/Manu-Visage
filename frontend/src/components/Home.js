@@ -5,8 +5,6 @@ const Button = ({ children, onClick }) => (
     {children}
   </button>
 );
-
-
 const Home = () => {
   const navigate = useNavigate();
   return (
